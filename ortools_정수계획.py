@@ -9,6 +9,7 @@ data=[[5,12,30,20,15],
 ]
 avg=[2,1,3,1,3]
 x={}
+#i:소방서 설치 구역 j:할당 지역
 for i in range(5):
     for j in range(5):
         x[i,j]=solver.BoolVar('x[%i,%i]'%(i,j))
@@ -37,4 +38,5 @@ if status==pywraplp.Solver.OPTIMAL:
         for j in range(5):
             if x[i,j].solution_value() !=0:
                 print(x[i,j].name(),':',x[i,j].solution_value())
-    print(y[i].name(),':',y[i].solution_value())
+    for i in range(5):
+        print(y[i].name(),':',y[i].solution_value())
