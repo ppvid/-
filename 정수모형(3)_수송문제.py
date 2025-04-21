@@ -52,7 +52,7 @@ x={}
 for i in range(4):
     for j in range(5):
         x[i,j]=solver.IntVar(0,solver.infinity(),f'x[{i},{j}]')
-#공급략
+#공급량
 for i in range(4):
     solver.Add(sum(x[i,j]for j in range(5))==supplies[i])
 #수요량
