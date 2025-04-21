@@ -81,4 +81,36 @@ if status==pywraplp.Solver.OPTIMAL:
     for i in range(len(limits)):
          if x[i].solution_value()==1:
              print(x[i].name(),':',x[i].solution_value())
-    
+
+from ortools.linear_solver import pywraplp
+solver=pywraplp.Solver.CreateSolver('SCIP')  
+
+#예제3_구역 커버
+data=[[1,3,4,6,7],
+      [4,7,8,12],
+      [2,5,9,11,13],
+      [1,2,14,15],
+      [3,6,10,12,14],
+      [8,14,15],
+      [1,2,6,11],
+      [1,2,4,6,8,12]]
+x={}
+for i in range(8):
+    x[i]=solver.BoolVar('x[%i]'%i)
+const={}
+for j in range(15):
+    con=[]
+    for i in range(8):
+        if j+1 in data[i]:
+            con.append(i)
+    const[j]=con
+for j in range(15):
+    solver.Add(sum(x[i] for i in const[j])>=1)
+
+solver.Minimize(sum(x[i] for i in range(8)))
+status=solver.Solve()
+if status==pywraplp.Solver.OPTIMAL:
+    print(solver.Objective().Value())
+    for i in range(8):
+        if x[i].solution_value()!=0:
+            print(x[i].name(),':',x[i].solution_value())
